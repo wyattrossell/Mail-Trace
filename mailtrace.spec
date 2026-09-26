@@ -19,6 +19,7 @@ datas = [
     (str(SRC / "mailtrace_core" / "enrichment" / "data" / "legal_process_targets.json"), "mailtrace_core/enrichment/data"),
     (str(SRC / "mailtrace_core" / "reporting" / "templates" / "report.html.j2"), "mailtrace_core/reporting/templates"),
     (str(ROOT / "docs" / "methodology.md"), "docs"),
+    (str(ROOT / "assets" / "mailtrace.ico"), "assets"),
 ]
 datas += collect_data_files("reportlab", includes=["fonts/*"])
 
@@ -79,7 +80,7 @@ gui_exe = EXE(
     upx=False,
     console=False,
     icon=str(ROOT / "assets" / "mailtrace.ico") if (ROOT / "assets" / "mailtrace.ico").exists() else None,
-    version=None,
+    version=str(ROOT / "build" / "version_info.txt") if (ROOT / "build" / "version_info.txt").exists() else None,
 )
 cli_pyz = PYZ(cli_a.pure, cli_a.zipped_data, cipher=block_cipher)
 cli_exe = EXE(
@@ -92,6 +93,7 @@ cli_exe = EXE(
     strip=False,
     upx=False,
     console=True,
+    icon=str(ROOT / "assets" / "mailtrace.ico") if (ROOT / "assets" / "mailtrace.ico").exists() else None,
 )
 coll = COLLECT(
     gui_exe,

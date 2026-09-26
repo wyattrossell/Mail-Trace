@@ -27,9 +27,20 @@ from your own build (synthetic samples only, never real case data)._
 
 ## Install
 
-**Release build (Windows 10/11):** download `MailTrace-<version>-windows-x64.zip`
-and `SHA256SUMS` from the [releases page](https://github.com/wyattrossell/Mail-Trace/releases),
-verify the hash, unzip, and run `MailTrace.exe` (GUI) or `mailtrace-cli.exe` (CLI).
+**Installer (Windows 10/11, recommended):** download `MailTrace-Setup-<version>.exe`
+from the [releases page](https://github.com/wyattrossell/Mail-Trace/releases) and run
+it. It installs per-user by default (no administrator rights needed), adds Start
+Menu and desktop shortcuts, and registers an uninstaller. Updates install over
+the previous version and replace the old shortcuts, so the desktop never keeps
+a stale icon. When a newer release is published, MailTrace prompts you at
+startup; choosing **Download and install** fetches the installer, verifies its
+SHA-256 against the release's `SHA256SUMS`, closes the app and runs the
+installer. Nothing is ever installed without that confirmation, and the check
+can be turned off in *Settings > Network* for air-gapped machines.
+
+**Portable build:** download `MailTrace-<version>-windows-x64.zip` and
+`SHA256SUMS`, verify the hash, unzip, and run `MailTrace.exe` (GUI) or
+`mailtrace-cli.exe` (CLI).
 
 ```
 certutil -hashfile MailTrace-<version>-windows-x64.zip SHA256

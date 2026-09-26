@@ -29,6 +29,8 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m pytest -q
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
       - name: Build executable and checksums
         run: python scripts/build_release.py
       - name: Smoke-test the built CLI
@@ -41,4 +43,5 @@ jobs:
           generate_release_notes: true
           files: |
             release/MailTrace-*-windows-x64.zip
+            release/MailTrace-Setup-*.exe
             release/SHA256SUMS

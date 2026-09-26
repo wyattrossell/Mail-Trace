@@ -45,6 +45,7 @@ from mailtrace_gui.views.result_tabs import (
     SummaryTab,
 )
 from mailtrace_gui.views.update_banner import UpdateBanner
+from mailtrace_gui.views.update_dialog import UpdateDialog, run_update
 from mailtrace_gui.workers import AnalysisWorker, file_job, text_job
 
 
@@ -117,6 +118,22 @@ class MainWindow(QMainWindow):
 
     @Slot(object)
     def _update_checked(self, res: UpdateCheckResult) -> None:
+        manual = getattr(self, "_update_manual", False)
+        if res.status == "update_available":
+            if not manual and res.latest_version == self.settings.update_skip_version:
+                return
+            self._log_report("update_available", version=res.latest_version, tag=res.tag)
+            dlg = UpdateDialog(res, self.palette_, self)
+            dlg.exec()
+            if dlg.choice == "install":
+                run_update(res, self, self._log_report, QApplication.quit)
+                return
+            if dlg.choice == "skip":
+                self.settings.update_skip_version = res.latest_version or ""
+                save_settings(self.settings)
+                return
+            self.banner.show_result(res)  # "Later": keep a quiet reminder
+            return
         self.banner.show_result(res)
         if not getattr(self, "_update_manual", False):
             return

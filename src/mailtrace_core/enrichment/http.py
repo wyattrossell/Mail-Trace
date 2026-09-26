@@ -8,7 +8,9 @@ inject an ``httpx.MockTransport`` so no test ever touches the network.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -86,6 +88,34 @@ class HttpClient:
             text=resp.text,
             headers={k.lower(): v for k, v in resp.headers.items()},
         )
+
+    def download(
+        self,
+        url: str,
+        category: netguard.NetCategory,
+        dest: Path,
+        progress: Callable[[int, int], None] | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> int:
+        """Stream a file to ``dest``; returns bytes written. Raises :class:`HttpError` on failure."""
+        netguard.require(category)
+        done = 0
+        try:
+            with self._client.stream("GET", url, headers=headers) as resp:
+                if resp.status_code >= 400:
+                    raise HttpError(f"HTTP {resp.status_code}")
+                total = int(resp.headers.get("content-length") or 0)
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                with dest.open("wb") as fh:
+                    for chunk in resp.iter_bytes(1 << 16):
+                        fh.write(chunk)
+                        done += len(chunk)
+                        if progress:
+                            progress(done, total)
+        except httpx.HTTPError as exc:
+            raise HttpError(f"{type(exc).__name__}: {exc}") from exc
+        self.requests_made += 1
+        return done
 
     def get(self, url: str, category: netguard.NetCategory, **kw: Any) -> HttpResponse:
         return self.request("GET", url, category, **kw)

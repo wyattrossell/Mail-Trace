@@ -14,7 +14,10 @@ Rules:
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -218,6 +221,84 @@ def check_for_updates(
                 http.close()
             except Exception:  # noqa: BLE001
                 pass
+
+
+INSTALLER_RE = re.compile(r"^MailTrace-Setup-.*\.exe$", re.IGNORECASE)
+
+
+class UpdateDownloadError(RuntimeError):
+    """The installer could not be obtained or verified; nothing was changed."""
+
+
+def installer_asset(res: UpdateCheckResult) -> ReleaseAsset | None:
+    for a in res.assets:
+        if INSTALLER_RE.match(a.name):
+            return a
+    return None
+
+
+def download_installer(
+    res: UpdateCheckResult,
+    dest_dir: Path,
+    *,
+    http: Any = None,
+    progress: Callable[[int, int], None] | None = None,
+) -> Path:
+    """Download the release installer and verify it against SHA256SUMS before returning its path.
+
+    Refuses to proceed when the release carries no installer or no published hash, and
+    deletes the file if the hash does not match, so an unverified installer never runs.
+    """
+    asset = installer_asset(res)
+    if asset is None:
+        raise UpdateDownloadError("this release has no Windows installer attached")
+    if not asset.sha256:
+        raise UpdateDownloadError(
+            "the release publishes no SHA256SUMS entry for the installer; "
+            "refusing to run an unverified installer"
+        )
+    if netguard.is_offline():
+        raise UpdateDownloadError("offline mode")
+    close = False
+    if http is None:
+        from mailtrace_core.enrichment.http import HttpClient
+
+        http = HttpClient(timeout=60.0)
+        close = True
+    dest = dest_dir / asset.name
+    try:
+        http.download(
+            asset.url,
+            netguard.NetCategory.UPDATE_CHECK,
+            dest,
+            progress,
+            headers={"Accept": "application/octet-stream"},
+        )
+    except Exception as exc:  # noqa: BLE001
+        dest.unlink(missing_ok=True)
+        raise UpdateDownloadError(f"download failed: {exc}") from exc
+    finally:
+        if close:
+            try:
+                http.close()
+            except Exception:  # noqa: BLE001
+                pass
+    actual = hashlib.sha256(dest.read_bytes()).hexdigest()
+    if actual != asset.sha256.lower():
+        dest.unlink(missing_ok=True)
+        raise UpdateDownloadError("downloaded installer does not match the published SHA-256; it was deleted")
+    return dest
+
+
+def launch_installer(path: Path) -> None:
+    """Start the verified Inno Setup installer detached; the caller must exit the app."""
+    import subprocess
+
+    subprocess.Popen(  # noqa: S603 - path was hash-verified against the release manifest
+        [str(path), "/SP-", "/CLOSEAPPLICATIONS", "/RESTARTAPPLICATIONS-"],
+        close_fds=True,
+        creationflags=getattr(subprocess, "DETACHED_PROCESS", 0),
+    )
 
 
 def _to_cache(res: UpdateCheckResult) -> dict[str, Any]:

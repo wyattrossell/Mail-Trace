@@ -154,6 +154,8 @@ class Settings:
     """Pre-filled in the New Case dialog."""
     default_agency: str = ""
     update_check_enabled: bool = True
+    update_skip_version: str = ""
+    """A release the user chose to skip; no prompt for it again."""
     """Turn off on air-gapped machines; the check contacts api.github.com once per day."""
 
     @property
