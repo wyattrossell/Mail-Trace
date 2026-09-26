@@ -1,0 +1,73 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int004 for
+ <det.example@examplecounty-sheriff.gov.test>; Thu, 17 Sep 2026 09:30:06 +0000
+Received: from vps-9.cheaphost.test (vps-9.cheaphost.test [198.51.100.23]) by
+ mx1.examplecounty-sheriff.gov.test with ESMTPS id jkl012 for
+ <det.example@examplecounty-sheriff.gov.test>; Thu, 17 Sep 2026 09:30:05 +0000
+From: "Accounts Payable" <ap@example-corp.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Invoice 88213 attached
+Date: Thu, 17 Sep 2026 09:30:00 +0000
+Message-ID: <inv-88213@vps-9.cheaphost.test>
+MIME-Version: 1.0
+Return-Path: <ap@invoices-mailer.test>
+Content-Type: multipart/mixed; boundary="===============1529913970413917879=="
+
+--===============1529913970413917879==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Please see the attached invoice.
+
+--===============1529913970413917879==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="Invoice_88213.pdf"
+MIME-Version: 1.0
+
+TVqQAAMAAAAEAAAA//8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+--===============1529913970413917879==
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="Invoice_88213.pdf.exe"
+MIME-Version: 1.0
+
+TVqQAAMAAAAEAAAA//8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+--===============1529913970413917879==
+Content-Type: application/vnd.ms-word.document.macroEnabled.12
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="details.docm"
+MIME-Version: 1.0
+
+UEsDBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+
+--===============1529913970413917879==
+Content-Type: application/zip
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="scan.zip"
+MIME-Version: 1.0
+
+UEsDBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+
+--===============1529913970413917879==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="terms.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjcKJXJlYWwgcGRmCg==
+
+--===============1529913970413917879==
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename*=utf-8''photo%E2%80%AEfdp.exe
+MIME-Version: 1.0
+
+iVBORw0KGgoAAAAAAAAAAAAAAAAAAAAA
+
+--===============1529913970413917879==--

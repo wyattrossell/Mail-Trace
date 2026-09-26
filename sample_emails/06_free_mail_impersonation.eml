@@ -1,0 +1,26 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int006 for
+ <det.example@examplecounty-sheriff.gov.test>; Mon, 21 Sep 2026 07:45:04 +0000
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com.
+ [209.85.220.41]) by mx1.examplecounty-sheriff.gov.test with ESMTPS id pqr678
+ for <det.example@examplecounty-sheriff.gov.test>; Mon, 21 Sep 2026 07:45:03
+ +0000
+From: "Sheriff Pat Example - Example County Sheriff Office"
+ <sheriff.example.office@gmail.com>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Quick task - are you at your desk?
+Date: Mon, 21 Sep 2026 07:45:00 +0000
+Message-ID: <CAExample123@mail.gmail.com>
+MIME-Version: 1.0
+Return-Path: <sheriff.example.office@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Authentication-Results: mx1.examplecounty-sheriff.gov.test; spf=pass
+ smtp.mailfrom=gmail.com; dkim=pass header.d=gmail.com; dmarc=pass
+ header.from=gmail.com
+
+I need you to purchase some gift cards for a recognition event. Reply with yo=
+ur cell number.
+
+Sent from my iPhone

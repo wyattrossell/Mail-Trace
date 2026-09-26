@@ -1,0 +1,54 @@
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=example-corp.test; i=@example-corp.test; q=dns/txt; s=s2026;
+ t=1790437685; h=from : to : subject : date : message-id;
+ bh=Puu/8ezeY/m2SvJkd+6Wf1MVvDUU87k/klo7FSINHvM=;
+ b=QOLXbT9vyjzOb0m2vuh2NUGIHu4C0Wc7j6w4fhIoOKcZ8LnobQkJjFvcRXU+dhvBPS+JW
+ WR1lAdTGYgQgXt2R3P49dGFPqROqS6kSa+Idan8ZRWgXp1VPmKuUe/hSiNItPARlUsf3nKr
+ IeWOaRQIDGqqfuLuXQNtjEIcSB2WZ0paqJwAtDfOv6Afm46N5vSRUkfavLbqOba/nSszyHx
+ w+KmcLtrfqwdmq0va3d11pfJAPVdQKN2RFxIVMGBoM/jkOxR+FV6iaul6vLafeosmlapR5N
+ sy47f3l7PVc4mSovDOk4JWSauIPURzj9vJWWp5TYbILlXZZH721Mxn4LsWRA==
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int001 for
+ <det.example@examplecounty-sheriff.gov.test>; Mon, 14 Sep 2026 14:02:15 +0000
+Received: from mail.example-corp.test (mail.example-corp.test [203.0.113.25])
+ by mx1.examplecounty-sheriff.gov.test with ESMTPS id abc123 for
+ <det.example@examplecounty-sheriff.gov.test>; Mon, 14 Sep 2026 14:02:13 +0000
+Received: from [10.20.30.40] (workstation-7.example-corp.test [10.20.30.40])
+ by mail.example-corp.test with ESMTPSA id xyz789; Mon, 14 Sep 2026 14:02:12
+ +0000
+From: "Records Department" <records@example-corp.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Subpoena response - case 26-001234
+Date: Mon, 14 Sep 2026 14:02:11 +0000
+Message-ID: <20260914140211.A1B2C3@mail.example-corp.test>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7648032510638237551=="
+Authentication-Results: mx1.examplecounty-sheriff.gov.test; spf=pass (sender
+ IP is 203.0.113.25) smtp.mailfrom=example-corp.test; dkim=pass
+ header.d=example-corp.test header.s=s2026; dmarc=pass action=none
+ header.from=example-corp.test
+Return-Path: <records@example-corp.test>
+
+--===============7648032510638237551==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Detective,
+
+Attached is the ALTERED response for your request.
+
+Portal: https://records.example-corp.test/case/26-001234
+
+Regards,
+Records Department
+
+--===============7648032510638237551==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="records-response.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJXN5bnRoZXRpYyB0ZXN0IGRvY3VtZW50Cg==
+
+--===============7648032510638237551==--

@@ -1,0 +1,20 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int007 for
+ <det.example@examplecounty-sheriff.gov.test>; Tue, 22 Sep 2026 13:10:03 +0000
+Received: from mail.examplecounty-sherriff.gov.test
+ (mail.examplecounty-sherriff.gov.test [198.51.100.150]) by
+ mx1.examplecounty-sheriff.gov.test with ESMTPS id stu901 for
+ <det.example@examplecounty-sheriff.gov.test>; Tue, 22 Sep 2026 13:10:02 +0000
+From: "IT Help Desk" <helpdesk@examplecounty-sherriff.gov.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Password expiry - action required
+Date: Tue, 22 Sep 2026 13:10:00 +0000
+Message-ID: <pw-1@examplecounty-sherriff.gov.test>
+MIME-Version: 1.0
+Return-Path: <helpdesk@examplecounty-sherriff.gov.test>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Your password expires today. Reset at https://portal.examplecounty-sherriff.g=
+ov.test/reset

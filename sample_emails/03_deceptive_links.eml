@@ -1,0 +1,44 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int003 for
+ <det.example@examplecounty-sheriff.gov.test>; Wed, 16 Sep 2026 11:00:05 +0000
+Received: from vps-9.cheaphost.test (vps-9.cheaphost.test [198.51.100.23]) by
+ mx1.examplecounty-sheriff.gov.test with ESMTPS id ghi789 for
+ <det.example@examplecounty-sheriff.gov.test>; Wed, 16 Sep 2026 11:00:04 +0000
+From: "PayPal" <service@paypal-notices.example>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Your account has been limited
+Date: Wed, 16 Sep 2026 11:00:00 +0000
+Message-ID: <lim-77@paypal-notices.example>
+MIME-Version: 1.0
+Return-Path: <service@paypal-notices.example>
+Content-Type: multipart/alternative;
+ boundary="===============5089259085602208924=="
+
+--===============5089259085602208924==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Your account has been limited. Visit https://login.rnicrosoft.example/verify
+
+--===============5089259085602208924==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html><body>
+<p>We noticed unusual activity. Please <a href=3D"https://login.rnicrosoft.ex=
+ample/verify">https://www.microsoft.com/account</a> to continue.</p>
+<p>Or use <a href=3D"https://xn--pypal-4ve.example/signin">PayPal Sign In</a>=
+.</p>
+<p>Direct: <a href=3D"http://203.0.113.200/pp/index.php">click here</a></p>
+<p>Short: <a href=3D"https://bit.ly/3xyzABC">update now</a></p>
+<p>Hidden: <a href=3D"https://www.paypal.com@paypal-notices.example/login">pa=
+ypal.com</a></p>
+<form action=3D"https://collect.paypal-notices.example/submit" method=3D"post=
+">
+<input name=3D"user"><input name=3D"pass" type=3D"password"></form>
+<div style=3D"display:none">lorem ipsum filter padding text</div>
+</body></html>
+
+--===============5089259085602208924==--

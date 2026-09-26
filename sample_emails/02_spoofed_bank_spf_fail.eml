@@ -1,0 +1,46 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int002 for
+ <det.example@examplecounty-sheriff.gov.test>; Tue, 15 Sep 2026 08:14:09 +0000
+Received: from mail.examplebank.test (srv-01.bulkhost.test [198.51.100.77]) by
+ mx1.examplecounty-sheriff.gov.test with ESMTP id def456 for
+ <det.example@examplecounty-sheriff.gov.test>; Tue, 15 Sep 2026 08:14:08 +0000
+Received: from mail.examplebank.test (mail.examplebank.test [203.0.113.99]) by
+ srv-01.bulkhost.test with ESMTP id fake001; Tue, 15 Sep 2026 08:14:05 +0000
+From: "Example Bank Security" <alerts@examplebank.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: URGENT: Unusual sign-in detected - verify your account
+Date: Tue, 15 Sep 2026 03:14:00 -0500
+Message-ID: <9f8e7d6c@srv-01.bulkhost.test>
+MIME-Version: 1.0
+Reply-To: examplebank.verification@gmail.com
+Return-Path: <bounce-4471@mailer-relay.test>
+X-Mailer: PHPMailer 6.9
+X-Originating-IP: [198.51.100.77]
+Content-Type: multipart/alternative;
+ boundary="===============1275694327355748919=="
+Authentication-Results: mx1.examplecounty-sheriff.gov.test; spf=fail (sender
+ IP is 198.51.100.77) smtp.mailfrom=mailer-relay.test; dkim=none; dmarc=fail
+ action=quarantine header.from=examplebank.test
+
+--===============1275694327355748919==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Dear Customer,
+
+We detected an unusual sign-in. Verify within 24 hours or your account will b=
+e suspended:
+https://examplebank-secure-verify.test/login
+
+--===============1275694327355748919==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html><body><p>Dear Customer,</p><p>We detected an unusual sign-in.</p><p><a =
+href=3D"https://examplebank-secure-verify.test/login">https://www.examplebank=
+.test/secure</a></p><img src=3D"https://track.mailer-relay.test/o/4471.gif" w=
+idth=3D"1" height=3D"1"></body></html>
+
+--===============1275694327355748919==--

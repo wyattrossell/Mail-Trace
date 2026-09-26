@@ -1,0 +1,48 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int010 for
+ <det.example@examplecounty-sheriff.gov.test>; Thu, 24 Sep 2026 15:00:03 +0000
+Received: from mail.example-corp.test (mail.example-corp.test [203.0.113.25])
+ by mx1.examplecounty-sheriff.gov.test with ESMTPS id vwx234 for
+ <det.example@examplecounty-sheriff.gov.test>; Thu, 24 Sep 2026 15:00:02 +0000
+From: "Newsletter" <news@example-corp.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Monthly update
+Date: Thu, 24 Sep 2026 15:00:00 +0000
+Message-ID: <news-9@mail.example-corp.test>
+MIME-Version: 1.0
+Return-Path: <news@example-corp.test>
+Content-Type: multipart/alternative;
+ boundary="===============1639524819174546338=="
+
+--===============1639524819174546338==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Monthly update. View online: https://news.example-corp.test/2026-09
+
+--===============1639524819174546338==
+MIME-Version: 1.0
+Content-Type: multipart/related;
+ boundary="===============4023588771199381685=="
+
+--===============4023588771199381685==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><img src=3D"cid:logo1"><p>Monthly update</p><a href=3D"https://ne=
+ws.example-corp.test/2026-09">View online</a><img src=3D"https://metrics.exam=
+ple-corp.test/open?id=3D9" style=3D"width:1px;height:1px"></body></html>
+
+--===============4023588771199381685==
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Disposition: inline; filename="logo.png"
+Content-ID: <logo1>
+MIME-Version: 1.0
+
+iVBORw0KGgoAAAAAAAAAAA==
+
+--===============4023588771199381685==--
+
+--===============1639524819174546338==--

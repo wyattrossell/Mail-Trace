@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mailtrace"
+dynamic = ["version"]
+description = "Forensic phishing/fraud email analysis for law enforcement investigators"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+dependencies = [
+    "dnspython>=2.6",
+    "dkimpy>=1.1",
+    "extract-msg>=0.48",
+    "keyring>=25",
+    "httpx>=0.27",
+    "Jinja2>=3.1",
+    "idna>=3.7",
+    "geoip2>=4.8",
+    "reportlab>=4.0",
+    "packaging>=23",
+]
+
+[project.optional-dependencies]
+gui = ["PySide6>=6.7"]
+dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "pyinstaller>=6", "pypdf>=4"]
+
+[project.scripts]
+mailtrace = "mailtrace_cli.main:main"
+
+[project.gui-scripts]
+mailtrace-gui = "mailtrace_gui.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "mailtrace_core.__version__"}
+
+[tool.setuptools.package-data]
+mailtrace_core = ["enrichment/data/*.json", "reporting/templates/*.j2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ANN"]
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN", "E501"]
+"sample_emails/*" = ["E501"]
+"src/mailtrace_core/reporting/*" = ["E501"]
+"src/mailtrace_gui/views/report_tab.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true

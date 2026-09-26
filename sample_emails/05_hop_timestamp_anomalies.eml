@@ -1,0 +1,22 @@
+Received: from mx1.examplecounty-sheriff.gov.test
+ (mx1.examplecounty-sheriff.gov.test [192.0.2.10]) by
+ mailstore.examplecounty-sheriff.gov.test with ESMTP id int005 for
+ <det.example@examplecounty-sheriff.gov.test>; Sat, 19 Sep 2026 12:00:10 +0000
+Received: from relay.bulkhost.test (relay.bulkhost.test [198.51.100.90]) by
+ mx1.examplecounty-sheriff.gov.test with ESMTP id mno345 for
+ <det.example@examplecounty-sheriff.gov.test>; Sat, 19 Sep 2026 12:00:09 +0000
+Received: from mail.example-corp.test (mail.example-corp.test [203.0.113.25])
+ by relay.bulkhost.test with ESMTP id fake; Wed, 16 Sep 2026 11:59:00 +0000
+Received: from [192.168.1.5] (unknown [192.168.1.5]) by mail.example-corp.test
+ with ESMTPA id x; Sat, 19 Sep 2026 11:30:00 +0000
+From: "Payroll" <payroll@example-corp.test>
+To: det.example@examplecounty-sheriff.gov.test
+Subject: Direct deposit change confirmation
+Date: Sat, 19 Sep 2026 18:00:00 +0000
+Message-ID: <pay-1@example-corp.test>
+MIME-Version: 1.0
+Return-Path: <payroll@example-corp.test>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Your direct deposit details were updated.

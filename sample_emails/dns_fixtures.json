@@ -1,0 +1,57 @@
+{
+  "TXT example-corp.test": [
+    "v=spf1 ip4:203.0.113.25 mx -all"
+  ],
+  "MX example-corp.test": [
+    "mail.example-corp.test"
+  ],
+  "A mail.example-corp.test": [
+    "203.0.113.25"
+  ],
+  "TXT s2026._domainkey.example-corp.test": [
+    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlgjWDZcZUe46Ccd1xIOzxlQVUozINHpiiQQUG3UHx/XUlhY7uPYagsOfi4zqsrAasttKC7JnsA30IrVFgsryLTt1Zi97I4KgNwaOw/xJoPt9GpdI7W6+gZ0UPf1Rxx90i8fABPsecwkvWujIRGQAgTIs88hIHL+0l3IJroyw02fifTFOgMs5TuYn5x80diLRGf2tKx9E9cwD4W9N2Q+/z5sZKajDofL5gSWvuqo0INdIwGYRBe6RZpi6YoUhv6HRmLhqczDI1+sI4nW9xEo7HOuEjmLL7vGPN/DtuQoDYMIA4vL0J1+1pEhjGkQj+fiZq0glhPGJkF4VkaO6JD4CsQIDAQAB"
+  ],
+  "TXT _dmarc.example-corp.test": [
+    "v=DMARC1; p=reject; adkim=s; aspf=s"
+  ],
+  "TXT examplebank.test": [
+    "v=spf1 ip4:203.0.113.0/24 include:_spf.bankmailer.test -all"
+  ],
+  "TXT _spf.bankmailer.test": [
+    "v=spf1 ip4:203.0.113.128/25 -all"
+  ],
+  "TXT _dmarc.examplebank.test": [
+    "v=DMARC1; p=reject; rua=mailto:dmarc@examplebank.test"
+  ],
+  "TXT mailer-relay.test": [
+    "v=spf1 ip4:203.0.113.128/25 -all"
+  ],
+  "TXT gmail.com": [
+    "v=spf1 redirect=_spf.google.com"
+  ],
+  "TXT _spf.google.com": [
+    "v=spf1 ip4:209.85.128.0/17 ~all"
+  ],
+  "TXT _dmarc.gmail.com": [
+    "v=DMARC1; p=none; sp=quarantine"
+  ],
+  "TXT shipping-notice.test": [
+    "v=spf1 a mx ~all"
+  ],
+  "A shipping-notice.test": [
+    "203.0.113.60"
+  ],
+  "MX shipping-notice.test": [
+    "mx.shipping-notice.test"
+  ],
+  "A mx.shipping-notice.test": [
+    "203.0.113.61"
+  ],
+  "TXT _dmarc.shipping-notice.test": [
+    "v=DMARC1; p=none"
+  ],
+  "TXT paypal-notices.example": [],
+  "TXT examplecounty-sherriff.gov.test": [
+    "v=spf1 ip4:198.51.100.150 -all"
+  ]
+}

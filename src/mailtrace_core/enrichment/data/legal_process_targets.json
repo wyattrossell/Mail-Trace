@@ -1,0 +1,383 @@
+{
+  "_meta": {
+    "version": 1,
+    "note": "Contact points for legal process, mapped from infrastructure observed in a message. This file is a starting point maintained by the examiner. Providers change portals and addresses; confirm each entry against the provider's current published law-enforcement guidelines before sending process, then set last_verified.",
+    "process_tiers": {
+      "basic_subscriber": "Basic subscriber information (name, address, length of service, means of payment, IP at sign-up) - 18 U.S.C. 2703(c)(2), typically a subpoena.",
+      "transactional": "Non-content transactional records (login IP history, session logs, recipient addresses, header information) - 18 U.S.C. 2703(d) court order.",
+      "content": "Stored content (message bodies, attachments, drive files) - search warrant under 18 U.S.C. 2703(a)/(b); many providers require a warrant for all content regardless of age.",
+      "emergency": "Most providers accept emergency disclosure requests under 18 U.S.C. 2702(b)(8)/(c)(4) where there is danger of death or serious physical injury.",
+      "foreign": "Providers outside the United States generally require an MLAT request, a CLOUD Act agreement channel, or a request via the provider's designated law-enforcement portal. Preservation is still usually possible directly."
+    },
+    "preservation_note": "Send a preservation request under 18 U.S.C. 2703(f) as soon as an account, IP address or domain of interest is identified. It obliges the provider to preserve existing records for 90 days, renewable once for a further 90 days, and requires no court process. It does not authorise disclosure; follow it with the appropriate subpoena, 2703(d) order or warrant. State the account identifier, date range, and that the request is made under 2703(f)."
+  },
+  "providers": [
+    {
+      "key": "google",
+      "name": "Google LLC",
+      "match": {
+        "asn_orgs": ["google"],
+        "domains": ["gmail.com", "googlemail.com", "google.com", "googlegroups.com", "youtube.com"],
+        "hostnames": ["google.com", "googlemail.com", "1e100.net", "googleusercontent.com", "googlehosted.com"],
+        "registrars": []
+      },
+      "portal": "https://lers.google.com",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://support.google.com/transparencyreport/answer/7381738",
+      "jurisdiction": "United States (Google LLC)",
+      "records_available": [
+        "Subscriber information: name, recovery email/phone, sign-up IP and date, services used",
+        "Login and account-activity IP logs",
+        "Gmail header information (non-content) with a 2703(d) order",
+        "Gmail content, Drive files, Photos with a warrant",
+        "Google Workspace: often obtainable from the customer organisation directly"
+      ],
+      "notes": "Requests are submitted through the Law Enforcement Request System (LERS). Preservation requests are accepted through the same portal.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "microsoft",
+      "name": "Microsoft Corporation",
+      "match": {
+        "asn_orgs": ["microsoft"],
+        "domains": ["outlook.com", "hotmail.com", "live.com", "msn.com", "microsoft.com", "office365.com", "onmicrosoft.com"],
+        "hostnames": ["outlook.com", "protection.outlook.com", "hotmail.com", "microsoft.com", "azure.com", "cloudapp.net", "trafficmanager.net"],
+        "registrars": []
+      },
+      "portal": "https://www.microsoft.com/en-us/corporate-responsibility/law-enforcement-requests-report",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://www.microsoft.com/en-us/corporate-responsibility/law-enforcement-requests-report",
+      "jurisdiction": "United States (Microsoft Corporation); Ireland for many EU accounts",
+      "records_available": [
+        "Outlook.com/Hotmail/Live subscriber information and sign-up IP",
+        "Login IP history and connection records",
+        "Email content with a warrant",
+        "Microsoft 365 business tenants: request from the customer organisation first; Microsoft redirects to the enterprise customer where possible",
+        "Azure-hosted infrastructure: customer identity and payment details"
+      ],
+      "notes": "Microsoft operates a dedicated Law Enforcement Request Portal for verified agencies; the report page links to the current guidelines and portal entry point.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "yahoo",
+      "name": "Yahoo Inc. (Yahoo Mail, AOL Mail)",
+      "match": {
+        "asn_orgs": ["yahoo", "oath holdings", "aol"],
+        "domains": ["yahoo.com", "ymail.com", "rocketmail.com", "aol.com", "aim.com", "verizon.net"],
+        "hostnames": ["yahoo.com", "yahoodns.net", "aol.com", "yahoo.net"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://www.yahooinc.com/transparency/",
+      "jurisdiction": "United States (Yahoo Inc.)",
+      "records_available": [
+        "Subscriber information, registration IP and date",
+        "Login IP logs (retention is limited; preserve early)",
+        "Email headers with a 2703(d) order; content with a warrant"
+      ],
+      "notes": "Yahoo's Law Enforcement Response Team publishes its guidelines and submission channel on the transparency site. Yahoo IP log retention is short, so a 2703(f) letter should go out immediately.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "apple",
+      "name": "Apple Inc. (iCloud Mail)",
+      "match": {
+        "asn_orgs": ["apple inc"],
+        "domains": ["icloud.com", "me.com", "mac.com", "apple.com"],
+        "hostnames": ["icloud.com", "apple.com", "mail.me.com"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "subpoenas@apple.com",
+      "phone": "",
+      "guidelines_url": "https://www.apple.com/legal/privacy/law-enforcement-guidelines-us.pdf",
+      "jurisdiction": "United States (Apple Inc.)",
+      "records_available": [
+        "Apple ID subscriber information, sign-up IP, associated devices",
+        "iCloud Mail logs and connection IPs",
+        "iCloud content (mail, backups, photos) with a warrant; end-to-end encrypted categories are not available"
+      ],
+      "notes": "Apple's US guidelines document lists the accepted request formats and the law-enforcement email address. Agencies can register for Apple's law-enforcement support portal.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "proton",
+      "name": "Proton AG (Proton Mail)",
+      "match": {
+        "asn_orgs": ["proton ag", "proton technologies"],
+        "domains": ["proton.me", "protonmail.com", "protonmail.ch", "pm.me"],
+        "hostnames": ["proton.me", "protonmail.ch", "protonmail.com"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://proton.me/legal/law-enforcement",
+      "jurisdiction": "Switzerland",
+      "records_available": [
+        "Account creation date and, where retained, IP address of last login (only when required by Swiss authorities)",
+        "Recovery email address if set",
+        "Message content is end-to-end encrypted and not available"
+      ],
+      "notes": "Foreign requests must go through Swiss authorities (MLAT or the Swiss Federal Office of Justice). Proton publishes its transparency report and process page; direct emergency contact details are on that page.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "cloudflare",
+      "name": "Cloudflare, Inc.",
+      "match": {
+        "asn_orgs": ["cloudflare"],
+        "domains": [],
+        "hostnames": ["cloudflare.com", "cloudflare-dns.com", "workers.dev", "pages.dev"],
+        "registrars": ["cloudflare"]
+      },
+      "portal": "https://www.cloudflare.com/trust-hub/",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://www.cloudflare.com/trust-hub/abuse-approach/",
+      "jurisdiction": "United States (Cloudflare, Inc.)",
+      "records_available": [
+        "Customer account information for a domain proxied through Cloudflare",
+        "Origin server IP address behind the proxy (with legal process)",
+        "Registrar records where Cloudflare is the registrar"
+      ],
+      "notes": "A site whose A record resolves to Cloudflare space is being proxied; the real hosting provider is behind it. Cloudflare's trust hub describes its legal-process and abuse channels.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "aws",
+      "name": "Amazon Web Services",
+      "match": {
+        "asn_orgs": ["amazon", "aws", "amazon.com", "amazon technologies", "amazon data services"],
+        "domains": ["amazonses.com", "amazonaws.com"],
+        "hostnames": ["amazonaws.com", "amazonses.com", "cloudfront.net", "awsdns"],
+        "registrars": ["amazon registrar"]
+      },
+      "portal": "",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://aws.amazon.com/compliance/amazon-information-requests/",
+      "jurisdiction": "United States (Amazon Web Services, Inc.)",
+      "records_available": [
+        "AWS customer account identity and payment details for a given IP/resource and time",
+        "Amazon SES sender identity and sending logs",
+        "Customer content only with a warrant and generally only if the customer cannot be approached"
+      ],
+      "notes": "Include the exact IP, port where known, and timestamp with time zone; AWS addresses are reassigned frequently.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "digitalocean",
+      "name": "DigitalOcean, LLC",
+      "match": {
+        "asn_orgs": ["digitalocean"],
+        "domains": [],
+        "hostnames": ["digitalocean.com"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "abuse@digitalocean.com",
+      "phone": "",
+      "guidelines_url": "https://www.digitalocean.com/legal/law-enforcement-guidelines",
+      "jurisdiction": "United States (DigitalOcean, LLC)",
+      "records_available": [
+        "Customer account identity, sign-up IP, payment information",
+        "Droplet (VPS) assignment history for an IP and time window",
+        "Server content with a warrant"
+      ],
+      "notes": "Abuse address is for preservation and takedown; legal process channel is described in the guidelines.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "ovh",
+      "name": "OVH Groupe SAS (OVHcloud)",
+      "match": {
+        "asn_orgs": ["ovh"],
+        "domains": [],
+        "hostnames": ["ovh.net", "ovh.com", "ovhcloud.com", "kimsufi.com"],
+        "registrars": ["ovh"]
+      },
+      "portal": "",
+      "email": "abuse@ovh.net",
+      "phone": "",
+      "guidelines_url": "https://www.ovhcloud.com/en/legal/",
+      "jurisdiction": "France (OVH SAS); regional subsidiaries in US and Canada",
+      "records_available": [
+        "Customer identity and billing for a server/IP",
+        "Server assignment history",
+        "Content requires French legal process or MLAT"
+      ],
+      "notes": "For US-hosted resources OVH US (Virginia) may accept US process; otherwise route via MLAT / Europol / Interpol channels.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "hetzner",
+      "name": "Hetzner Online GmbH",
+      "match": {
+        "asn_orgs": ["hetzner"],
+        "domains": [],
+        "hostnames": ["hetzner.de", "hetzner.com", "your-server.de", "clients.your-server.de"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "abuse@hetzner.com",
+      "phone": "",
+      "guidelines_url": "https://www.hetzner.com/legal/",
+      "jurisdiction": "Germany",
+      "records_available": [
+        "Customer identity and payment for a server/IP",
+        "Content only through German legal process / MLAT"
+      ],
+      "notes": "German hosting provider; preservation via abuse desk, disclosure via MLAT.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "godaddy",
+      "name": "GoDaddy.com, LLC",
+      "match": {
+        "asn_orgs": ["godaddy"],
+        "domains": [],
+        "hostnames": ["secureserver.net", "godaddy.com", "domaincontrol.com"],
+        "registrars": ["godaddy", "wild west domains"]
+      },
+      "portal": "",
+      "email": "abuse@godaddy.com",
+      "phone": "",
+      "guidelines_url": "https://www.godaddy.com/legal/agreements/civil-subpoena-policy",
+      "jurisdiction": "United States (Arizona)",
+      "records_available": [
+        "Registrant identity behind WHOIS privacy, payment details, registration IP",
+        "Hosting customer records for sites on GoDaddy hosting",
+        "Workspace/Microsoft 365-by-GoDaddy mailbox subscriber details"
+      ],
+      "notes": "GoDaddy publishes separate subpoena and law-enforcement policies; domain records are held by GoDaddy even when the site is hosted elsewhere.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "namecheap",
+      "name": "Namecheap, Inc.",
+      "match": {
+        "asn_orgs": ["namecheap"],
+        "domains": [],
+        "hostnames": ["namecheap.com", "registrar-servers.com", "namecheaphosting.com", "web-hosting.com"],
+        "registrars": ["namecheap"]
+      },
+      "portal": "",
+      "email": "abuse@namecheap.com",
+      "phone": "",
+      "guidelines_url": "https://www.namecheap.com/legal/general/law-enforcement-requests/",
+      "jurisdiction": "United States (Arizona)",
+      "records_available": [
+        "Registrant identity behind WhoisGuard/Withheld for Privacy, payment method, sign-up and login IPs",
+        "Private Email mailbox subscriber details",
+        "Hosting account details where Namecheap hosts the site"
+      ],
+      "notes": "Very common registrar for lookalike phishing domains; privacy-protected WHOIS is the norm, so registrant identity requires process.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "tucows",
+      "name": "Tucows / Enom / Hover",
+      "match": {
+        "asn_orgs": ["tucows"],
+        "domains": [],
+        "hostnames": ["hover.com", "enom.com", "tucows.com", "name-services.com"],
+        "registrars": ["tucows", "enom", "hover", "epag"]
+      },
+      "portal": "https://tucowsdomains.com/legal-requests/",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://tucowsdomains.com/legal-requests/",
+      "jurisdiction": "Canada (Tucows Inc.)",
+      "records_available": [
+        "Registrant identity behind privacy service, payment details, registration IP"
+      ],
+      "notes": "Tucows accepts requests through its legal-requests page; Canadian entity, US process may need a treaty channel for compelled disclosure.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "zoho",
+      "name": "Zoho Corporation",
+      "match": {
+        "asn_orgs": ["zoho"],
+        "domains": ["zoho.com", "zohomail.com", "zoho.eu"],
+        "hostnames": ["zoho.com", "zohomail.com", "zmail.zoho.com"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://www.zoho.com/privacy/law-enforcement.html",
+      "jurisdiction": "United States (Zoho Corporation, Texas) and India",
+      "records_available": [
+        "Organisation/admin subscriber details for a Zoho Mail domain",
+        "Login IP logs",
+        "Content with a warrant"
+      ],
+      "notes": "Zoho Mail is frequently used for BEC (business email compromise) lookalike domains.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "sendgrid",
+      "name": "Twilio SendGrid",
+      "match": {
+        "asn_orgs": ["sendgrid", "twilio"],
+        "domains": ["sendgrid.net", "sendgrid.com"],
+        "hostnames": ["sendgrid.net", "sendgrid.com"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "",
+      "phone": "",
+      "guidelines_url": "https://www.twilio.com/en-us/legal/law-enforcement-guidelines",
+      "jurisdiction": "United States (Twilio Inc.)",
+      "records_available": [
+        "Customer account identity and payment behind a sending sub-user",
+        "Message event logs (sends, opens, clicks) for the account"
+      ],
+      "notes": "Bulk email service; the Return-Path or Received hostname identifies the account by numeric ID.",
+      "verify_before_use": true,
+      "last_verified": null
+    },
+    {
+      "key": "mailgun",
+      "name": "Mailgun (Sinch)",
+      "match": {
+        "asn_orgs": ["mailgun"],
+        "domains": ["mailgun.org", "mailgun.net"],
+        "hostnames": ["mailgun.org", "mailgun.net", "mailgun.info"],
+        "registrars": []
+      },
+      "portal": "",
+      "email": "abuse@mailgun.com",
+      "phone": "",
+      "guidelines_url": "https://www.mailgun.com/legal/",
+      "jurisdiction": "United States (Mailgun Technologies, Inc.)",
+      "records_available": [
+        "Customer account identity and payment behind a sending domain",
+        "Message event logs"
+      ],
+      "notes": "",
+      "verify_before_use": true,
+      "last_verified": null
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ m.report_id }} - Email Forensic Analysis Report</title>
+<style>
+:root { --ink:#1c2128; --muted:#5f6877; --line:#d5dae2; --bg:#fff; --alt:#f3f5f8;
+        --high:#c62828; --medium:#b26a00; --low:#1565c0; --info:#5f6877; --ok:#1b8a4c; }
+* { box-sizing: border-box; }
+body { font-family: "Segoe UI", Arial, sans-serif; color: var(--ink); background: var(--bg); margin: 0; font-size: 11pt; line-height: 1.45; }
+.page { max-width: 960px; margin: 0 auto; padding: 28px 36px 80px; }
+header.rep { display: flex; align-items: center; gap: 18px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 18px; }
+header.rep img { height: 64px; }
+header.rep .agency { font-size: 16pt; font-weight: 700; }
+header.rep .line2 { color: var(--muted); }
+header.rep .title { margin-left: auto; text-align: right; }
+header.rep .title h1 { margin: 0; font-size: 15pt; }
+.classification { text-align: center; font-weight: 700; letter-spacing: .12em; color: var(--high); margin-bottom: 10px; }
+h2 { font-size: 13.5pt; border-bottom: 1px solid var(--line); padding-bottom: 4px; margin: 26px 0 10px; }
+h3 { font-size: 11.5pt; margin: 16px 0 6px; }
+table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.5pt; }
+th, td { border: 1px solid var(--line); padding: 4px 6px; vertical-align: top; text-align: left; }
+th { background: var(--alt); }
+tr:nth-child(even) td { background: #fafbfc; }
+code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 9.5pt; word-break: break-all; }
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+.meta div span { color: var(--muted); display: inline-block; min-width: 130px; }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 4px; font-weight: 600; font-size: 9pt; color: #fff; }
+.b-high { background: var(--high); } .b-medium { background: var(--medium); } .b-low { background: var(--low); } .b-info { background: var(--info); }
+.b-confirmed { background: var(--ok); } .b-likely { background: var(--medium); } .b-unverified { background: var(--info); }
+.verdict { border: 2px solid var(--ink); border-radius: 8px; padding: 12px 16px; margin: 10px 0 16px; }
+.verdict .label { font-size: 13pt; font-weight: 700; }
+.summary p { margin: 6px 0; }
+.trusted td { background: #e9f6ee !important; }
+.small { font-size: 9pt; color: var(--muted); }
+.wrap { word-break: break-all; }
+ul.tight { margin: 4px 0; padding-left: 20px; }
+footer.rep { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 6px 36px; font-size: 8.5pt; color: var(--muted); display: flex; justify-content: space-between; }
+@media print { .page { padding-bottom: 60px; } footer.rep { position: fixed; } h2 { page-break-after: avoid; } table { page-break-inside: auto; } tr { page-break-inside: avoid; } @page { margin: 18mm 14mm 22mm; } }
+</style>
+</head>
+<body>
+<div class="page">
+{% if m.classification %}<div class="classification">{{ m.classification }}</div>{% endif %}
+<header class="rep">
+  {% if logo_data %}<img src="{{ logo_data }}" alt="agency logo">{% endif %}
+  <div><div class="agency">{{ m.agency_name or "MailTrace" }}</div>{% if m.agency_line2 %}<div class="line2">{{ m.agency_line2 }}</div>{% endif %}</div>
+  <div class="title"><h1>Email Forensic Analysis Report</h1><div class="small">Report ID <span class="mono">{{ m.report_id }}</span></div></div>
+</header>
+
+<h2>1. Case information</h2>
+<div class="meta">
+  <div><span>Case number</span>{{ m.case_number or "n/a" }}</div>
+  <div><span>Agency</span>{{ m.case_agency or m.agency_name or "n/a" }}</div>
+  <div><span>Examiner</span>{{ m.examiner or "n/a" }}</div>
+  <div><span>Generated (UTC)</span>{{ m.generated_at }}</div>
+  <div><span>Tool</span>MailTrace v{{ m.tool_version }}</div>
+  <div><span>Case folder</span><span class="mono wrap">{{ m.case_root or "none" }}</span></div>
+</div>
+
+<h3>Evidence</h3>
+<table>
+<tr><th>ID</th><th>File</th><th>Size</th><th>SHA-256</th><th>MD5</th><th>Ingested (UTC)</th><th>Original path</th></tr>
+{% for e in r.evidence %}
+<tr><td>{{ e.item_id }}</td><td>{{ e.filename }}</td><td>{{ e.size }}</td><td class="mono">{{ e.sha256 }}</td><td class="mono">{{ e.md5 }}</td><td>{{ e.ingested_at }}</td><td class="wrap small">{{ e.original_path }}</td></tr>
+{% else %}
+<tr><td colspan="7">Analysed from <span class="mono">{{ pe.source_name }}</span> without case intake; no hashes recorded.</td></tr>
+{% endfor %}
+</table>
+
+<h2>2. Executive summary</h2>
+<div class="verdict">
+  <div class="label">{{ v.label }} <span class="badge b-{{ v.confidence.value }}">{{ v.confidence.value }}</span></div>
+  <div>{{ v.sender_assessment }} <span class="badge b-{{ v.sender_confidence.value }}">{{ v.sender_confidence.value }}</span></div>
+  {% if v.basis %}<div class="small" style="margin-top:6px">Basis: {{ v.basis | join("; ") }}</div>{% endif %}
+</div>
+<div class="summary">{% for p in r.executive_summary %}<p>{{ p }}</p>{% endfor %}</div>
+{% if r.key_observations %}<h3>Key observations</h3><ul class="tight">{% for k in r.key_observations %}<li>{{ k }}</li>{% endfor %}</ul>{% endif %}
+
+<h2>3. Message identity</h2>
+<table>
+<tr><th style="width:140px">Subject</th><td>{{ pe.subject or "" }}</td></tr>
+<tr><th>From</th><td>{{ pe.from_.display_name if pe.from_ else "" }} &lt;{{ (pe.from_.address if pe.from_ else "") | defang_email }}&gt;</td></tr>
+<tr><th>Reply-To</th><td>{% for a in pe.reply_to %}{{ a.address | defang_email }}{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>
+<tr><th>Return-Path</th><td>{{ (pe.return_path.address if pe.return_path else "") | defang_email }}</td></tr>
+<tr><th>To</th><td>{% for a in pe.to %}{{ a.address | defang_email }}{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>
+<tr><th>Date header</th><td>{{ pe.date.isoformat() if pe.date else pe.header("Date") }}</td></tr>
+<tr><th>Message-ID</th><td class="mono">{{ pe.message_id or "" }}</td></tr>
+</table>
+
+<h2>4. Delivery route</h2>
+<div style="overflow-x:auto">{{ route_svg | safe }}</div>
+<p class="small">Solid boxes were written by the recipient's infrastructure; dashed boxes were written by other parties and may be fabricated.</p>
+<table>
+<tr><th>#</th><th>Trust</th><th>Timestamp (as written)</th><th>Delay</th><th>From host</th><th>From IP</th><th>By host</th><th>Protocol</th><th>Anomalies</th></tr>
+{% for h in pe.hops %}
+<tr class="{{ 'trusted' if h.trusted else '' }}"><td>{{ h.index }}</td><td>{{ "trusted" if h.trusted else "unverified" }}</td><td class="mono">{{ h.timestamp.isoformat() if h.timestamp else "" }}</td><td>{{ "%+.0fs" % h.delay_seconds if h.delay_seconds is not none else "" }}</td><td>{{ h.from_host or h.from_helo or "" }}</td><td class="mono">{{ h.from_ip | defang_ip if h.from_ip else "" }}</td><td>{{ h.by_host or "" }}</td><td>{{ h.protocol or "" }}</td><td>{{ h.anomalies | join("; ") }}</td></tr>
+{% else %}<tr><td colspan="9">No Received headers.</td></tr>{% endfor %}
+</table>
+<h3>Originating IP candidates</h3>
+<table><tr><th>IP</th><th>Confidence</th><th>Source</th><th>Note</th></tr>
+{% for c in pe.origin_candidates %}<tr><td class="mono">{{ c.ip | defang_ip }}{% if c.is_private %} (private){% endif %}</td><td><span class="badge b-{{ c.confidence.value }}">{{ c.confidence.value }}</span></td><td>{{ c.source }}</td><td>{{ c.note }}</td></tr>{% endfor %}
+</table>
+
+<h2>5. Authentication</h2>
+<table><tr><th>Check</th><th>Result</th><th>Domain</th><th>Detail</th></tr>
+{% if au.spf %}<tr><td>SPF (independent)</td><td>{{ au.spf.result }}</td><td>{{ au.spf.domain or "" }}</td><td>client IP {{ au.spf.client_ip | defang_ip if au.spf.client_ip else "-" }}; matched {{ au.spf.matched_mechanism or "-" }}; {{ au.spf.detail }}<br><span class="mono small">{{ au.spf.record or "" }}</span></td></tr>{% endif %}
+{% if au.dkim %}<tr><td>DKIM (independent)</td><td>{{ au.dkim.result }}</td><td>{{ au.dkim.domain or "" }} (s={{ au.dkim.selector or "" }})</td><td>{{ au.dkim.detail }}; signed: {{ au.dkim.signed_headers | join(", ") }}</td></tr>{% endif %}
+{% if au.dmarc %}<tr><td>DMARC (independent)</td><td>{{ au.dmarc.result }}</td><td>{{ au.dmarc.domain or "" }}</td><td>policy p={{ au.dmarc.policy or "-" }}; {{ au.dmarc.detail }}<br><span class="mono small">{{ au.dmarc.record or "" }}</span></td></tr>{% endif %}
+{% for x in au.reported %}<tr><td>Reported: {{ x.method }}</td><td>{{ x.result }}</td><td>{{ x.authserv_id }}</td><td class="small">{{ x.raw }}</td></tr>{% endfor %}
+</table>
+{% if au.skipped_checks %}<p class="small">Skipped: {{ au.skipped_checks | join(", ") }}.</p>{% endif %}
+
+<h2>6. Findings and spoofing indicators</h2>
+<table><tr><th>Severity</th><th>Confidence</th><th>Rule</th><th>Finding</th><th>Explanation and evidence</th></tr>
+{% for f in r.result.findings %}
+<tr><td><span class="badge b-{{ f.severity.value }}">{{ f.severity.value }}</span></td><td><span class="badge b-{{ f.confidence.value }}">{{ f.confidence.value }}</span></td><td>{{ f.rule_id }}</td><td>{{ f.title }}</td>
+<td>{{ f.explanation }}{% if f.evidence %}<ul class="tight small">{% for e in f.evidence %}<li><span class="mono">{{ e.source }}</span>: {{ e.value }}{% if e.note %} ({{ e.note }}){% endif %}</li>{% endfor %}</ul>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5">No findings.</td></tr>{% endfor %}
+</table>
+
+<h2>7. Links and attachments (defanged)</h2>
+<table><tr><th>Source</th><th>URL</th><th>Host</th><th>Visible text</th><th>Flags</th></tr>
+{% for u in pe.urls %}<tr><td>{{ u.source }}</td><td class="mono wrap">{{ u.defanged }}</td><td class="mono">{{ u.host or "" }}</td><td>{{ u.display_text or "" }}</td><td>{% if u.display_mismatch %}text/href mismatch; {% endif %}{% if u.is_ip_host %}IP host; {% endif %}{% if u.is_idn %}IDN ({{ u.unicode_host }}); {% endif %}{% if u.is_shortener %}shortener{% endif %}</td></tr>
+{% else %}<tr><td colspan="5">No URLs.</td></tr>{% endfor %}
+</table>
+<table><tr><th>Attachment</th><th>Size</th><th>Declared</th><th>Detected</th><th>SHA-256</th><th>Notes</th></tr>
+{% for a in pe.attachments %}<tr><td>{{ a.filename }}</td><td>{{ a.size }}</td><td>{{ a.declared_type }}</td><td>{{ a.detected_type or "unknown" }}{% if a.type_mismatch %} <b>MISMATCH</b>{% endif %}</td><td class="mono">{{ a.sha256 }}</td><td>{{ a.notes | join("; ") }}</td></tr>
+{% else %}<tr><td colspan="6">No attachments.</td></tr>{% endfor %}
+</table>
+
+<h2>8. Enrichment</h2>
+{% if en %}
+<p class="small">{{ en.lookups_performed }} lookups performed, {{ en.lookups_cached }} served from the case cache. Started {{ en.started_at }}, finished {{ en.finished_at }}.</p>
+{% if en.risk %}<h3>Risk score: {{ en.risk.score }} / 100 ({{ en.risk.band }})</h3>
+<table><tr><th>Points</th><th>Factor</th><th>Evidence</th><th>Source</th></tr>
+{% for f in en.risk.factors %}<tr><td>{{ "%+d" % f.points }}</td><td>{{ f.name }}</td><td>{{ f.evidence }}</td><td>{{ f.source }}</td></tr>{% endfor %}</table>
+{% for n in en.risk.notes %}<div class="small">{{ n }}</div>{% endfor %}{% endif %}
+<h3>IP addresses</h3>
+<table><tr><th>IP</th><th>Role</th><th>ASN / organisation</th><th>Location</th><th>Reverse DNS</th><th>Network (RDAP)</th><th>Abuse contact</th><th>Flags</th><th>Reputation</th></tr>
+{% for ip in en.ips %}<tr><td class="mono">{{ ip.ip | defang_ip }}</td><td>{{ ip.roles | join("; ") }}</td><td>{% if ip.asn %}AS{{ ip.asn }} {% endif %}{{ ip.asn_org or ip.isp or "" }}</td><td>{{ [ip.country, ip.region, ip.city] | select | join(" / ") }}</td><td class="mono small">{{ ip.reverse_dns | join(", ") }}</td><td>{{ ip.network_name or "" }} {{ ip.network_cidr or "" }}</td><td class="mono small">{{ ip.abuse_contacts | join(", ") }}</td><td>{% if ip.hosting %}hosting {% endif %}{% if ip.vpn %}VPN {% endif %}{% if ip.proxy %}proxy {% endif %}{% if ip.tor %}Tor{% endif %}{% if ip.flag_reasons %}<div class="small">{{ ip.flag_reasons | join("; ") }}</div>{% endif %}</td><td>{% for rv in ip.reputation %}{{ rv.provider }}: {{ rv.verdict }} ({{ rv.summary }})<br>{% endfor %}</td></tr>{% endfor %}
+</table>
+<h3>Domains</h3>
+<table><tr><th>Domain</th><th>Role</th><th>Registrar</th><th>Created</th><th>Age</th><th>Registrar abuse</th><th>Registrant</th><th>A / MX / NS</th><th>Reputation</th></tr>
+{% for d in en.domains %}<tr><td class="mono">{{ d.domain }}</td><td>{{ d.roles | join("; ") }}</td><td>{{ d.registrar or "" }}{% if d.registrar_iana_id %} (IANA {{ d.registrar_iana_id }}){% endif %}</td><td>{{ d.created or "" }}</td><td>{% if d.age_days is not none %}{{ d.age_days }} d{% if d.is_new %} <b>NEW</b>{% endif %}{% endif %}</td><td class="small">{{ d.registrar_abuse_email or "" }} {{ d.registrar_abuse_phone or "" }}</td><td class="small">{{ d.registrant_org or "" }} {{ d.registrant_country or "" }}</td><td class="mono small">A: {{ d.a | join(", ") }}<br>MX: {{ d.mx | join(", ") }}<br>NS: {{ d.ns | join(", ") }}</td><td>{% for rv in d.reputation %}{{ rv.provider }}: {{ rv.verdict }} ({{ rv.summary }})<br>{% endfor %}</td></tr>{% endfor %}
+</table>
+{% if en.url_reputation or en.attachment_reputation %}<h3>URL and attachment reputation (hash lookups only)</h3>
+<table><tr><th>Provider</th><th>Type</th><th>Verdict</th><th>Summary</th><th>Target</th><th>Detail</th></tr>
+{% for rv in en.url_reputation + en.attachment_reputation %}<tr><td>{{ rv.provider }}</td><td>{{ rv.target_type }}</td><td>{{ rv.verdict }}</td><td>{{ rv.summary }}</td><td class="mono wrap">{{ rv.target | defang_url if rv.target_type == "url" else rv.target }}</td><td class="small">{{ rv.detail }}</td></tr>{% endfor %}</table>{% endif %}
+{% if en.skipped %}<p class="small">Providers not consulted: {{ en.skipped | join("; ") }}.</p>{% endif %}
+{% else %}<p>No enrichment was performed for this report.</p>{% endif %}
+
+<h2>9. Legal process targets</h2>
+{% if en and en.legal_targets %}
+<p><b>Preservation first.</b> {{ en.preservation_note }}</p>
+<table><tr><th>Provider</th><th>Role in this case</th><th>Matched on</th><th>Contact / portal</th><th>Jurisdiction</th><th>Records typically available</th><th>Notes</th></tr>
+{% for t in en.legal_targets %}<tr><td>{{ t.provider_name }}{% if t.verify_before_use %}<div class="small">verify before use{% if t.last_verified %} (last verified {{ t.last_verified }}){% endif %}</div>{% endif %}</td><td>{{ t.role }}</td><td class="small">{{ t.matched_on }}</td><td class="wrap small">{{ [t.portal, t.email, t.phone, t.guidelines_url] | select | join(" | ") }}</td><td>{{ t.jurisdiction }}</td><td><ul class="tight small">{% for rec in t.records_available %}<li>{{ rec }}</li>{% endfor %}</ul></td><td class="small">{{ t.notes }}</td></tr>{% endfor %}
+</table>
+{% else %}<p>No legal-process targets were identified{% if not en %} (enrichment not performed){% endif %}.</p>{% endif %}
+
+<h2>10. Limitations</h2>
+<ul>{% for l in r.limitations %}<li>{{ l }}</li>{% endfor %}</ul>
+
+<h2>Appendix A. Audit log</h2>
+{% if r.audit_entries %}
+<table><tr><th>#</th><th>UTC time</th><th>Action</th><th>Examiner</th><th>Details</th><th>Entry hash</th></tr>
+{% for e in r.audit_entries %}<tr><td>{{ e.seq }}</td><td class="mono">{{ e.timestamp_utc }}</td><td>{{ e.action }}</td><td>{{ e.examiner }}</td><td class="small wrap">{% for k, val in e.details.items() %}{{ k }}={{ val }}{% if not loop.last %}; {% endif %}{% endfor %}</td><td class="mono small">{{ e.entry_hash[:16] }}…</td></tr>{% endfor %}
+</table>
+{% else %}<p>No case audit log (analysis run outside a case).</p>{% endif %}
+
+<h2>Appendix B. Analysis settings</h2>
+<table>{% for k, val in r.settings_snapshot.items() %}<tr><th style="width:240px">{{ k }}</th><td class="mono">{{ val }}</td></tr>{% endfor %}</table>
+{% if pe.warnings %}<h3>Parser warnings</h3><ul class="tight small">{% for w in pe.warnings %}<li>{{ w }}</li>{% endfor %}</ul>{% endif %}
+</div>
+<footer class="rep"><span>{{ m.report_id }}{% if m.footer_note %} · {{ m.footer_note }}{% endif %}</span><span>Generated {{ m.generated_at }} · MailTrace v{{ m.tool_version }}{% if m.classification %} · {{ m.classification }}{% endif %}</span></footer>
+</body>
+</html>
