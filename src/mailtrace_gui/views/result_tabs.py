@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from html import escape
 from pathlib import Path
 
 from PySide6.QtCore import Qt
@@ -34,6 +35,8 @@ from mailtrace_core.models import (
     ParsedEmail,
     Severity,
 )
+from mailtrace_core.reporting.summary import executive_summary
+from mailtrace_core.reporting.verdict import assess
 from mailtrace_core.util.defang import defang_email, defang_ip
 from mailtrace_gui.theme.styles import Palette, badge_html
 
@@ -91,6 +94,14 @@ class SummaryTab(QWidget):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(12, 12, 12, 12)
         lay.setSpacing(12)
+        self.narrative = _Card("What this means")
+        self.narrative_body = QLabel("Analyse a message to see a plain-language summary here.")
+        self.narrative_body.setTextFormat(Qt.TextFormat.RichText)
+        self.narrative_body.setWordWrap(True)
+        self.narrative_body.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        self.narrative_body.setStyleSheet("background: transparent;")
+        self.narrative.lay.addWidget(self.narrative_body)
+        lay.addWidget(self.narrative)
         top = QHBoxLayout()
         self.identity = _Card("Message")
         self.identity_form = QFormLayout()
@@ -115,6 +126,23 @@ class SummaryTab(QWidget):
         lay.addWidget(self.warnings)
         lay.addStretch(1)
 
+    def _show_narrative(self, result: AnalysisResult) -> None:
+        """Plain-language account of the message for supervisors and non-technical readers."""
+        p = self.p
+        v = assess(result)
+        conf_colour = {"confirmed": p.confirmed, "likely": p.likely, "unverified": p.unverified}
+        paras = executive_summary(result, v)
+        html = (
+            f"<div style='font-size:11.5pt;font-weight:600;margin-bottom:6px'>{escape(v.label)} "
+            f"{badge_html(v.confidence.value, conf_colour[v.confidence.value])}</div>"
+            + "".join(f"<p style='margin:4px 0'>{escape(para)}</p>" for para in paras)
+            + f"<p style='margin-top:8px;color:{p.text_muted}'><b>What to do next.</b> Keep the original file as "
+            "evidence (it is already hashed in the case folder), send preservation requests to the providers listed "
+            "on the Legal process tab, and verify each finding before relying on it. The same wording, with the "
+            "technical detail behind it, appears in the generated report.</p>"
+        )
+        self.narrative_body.setText(html)
+
     def _row(self, label: str, value: str, mono: bool = False) -> None:
         v = QLabel(value or "—")
         v.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
@@ -129,6 +157,7 @@ class SummaryTab(QWidget):
 
     def show(self, result: AnalysisResult) -> None:  # type: ignore[override]
         pe = result.email
+        self._show_narrative(result)
         while self.identity_form.rowCount():
             self.identity_form.removeRow(0)
         self._row("Source", f"{pe.source_name}  ({pe.source_format.value})")

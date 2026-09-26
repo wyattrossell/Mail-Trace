@@ -39,7 +39,7 @@ class UpdateBanner(QFrame):
             row.addWidget(b)
         outer.addLayout(row)
         self.notes = QTextBrowser()
-        self.notes.setOpenExternalLinks(False)
+        self.notes.setOpenExternalLinks(True)
         self.notes.setMaximumHeight(180)
         self.notes.setVisible(False)
         outer.addWidget(self.notes)

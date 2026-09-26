@@ -132,12 +132,17 @@ class PasteDialog(QDialog):
 
 class SettingsDialog(QDialog):
     PROVIDERS = (
-        ("virustotal", "VirusTotal"),
-        ("abuseipdb", "AbuseIPDB"),
-        ("urlhaus", "URLhaus (abuse.ch Auth-Key)"),
-        ("safebrowsing", "Google Safe Browsing"),
-        ("ipinfo", "ipinfo.io token (optional)"),
+        ("virustotal", "VirusTotal", "https://www.virustotal.com/gui/my-apikey"),
+        ("abuseipdb", "AbuseIPDB", "https://www.abuseipdb.com/account/api"),
+        ("urlhaus", "URLhaus (abuse.ch Auth-Key)", "https://auth.abuse.ch/"),
+        (
+            "safebrowsing",
+            "Google Safe Browsing",
+            "https://developers.google.com/safe-browsing/v4/get-started",
+        ),
+        ("ipinfo", "ipinfo.io token (optional)", "https://ipinfo.io/signup"),
     )
+    GEOLITE_URL = "https://www.maxmind.com/en/geolite2/signup"
 
     def __init__(self, settings: Settings, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -232,6 +237,7 @@ class SettingsDialog(QDialog):
         nl.addSpacing(8)
         nl.addWidget(self.update_check_enabled)
         nl.addWidget(upd_note)
+        nl.addWidget(self._link("Open the MailTrace releases page", RELEASES_PAGE))
         nl.addSpacing(16)
         nl.addWidget(self.active)
         nl.addWidget(warn)
@@ -275,6 +281,7 @@ class SettingsDialog(QDialog):
         enr_note.setObjectName("muted")
         enr_note.setWordWrap(True)
         rf.addRow(self.enrichment_enabled)
+        rf.addRow(self._link("Get the free GeoLite2 City and ASN databases from MaxMind", self.GEOLITE_URL))
         rf.addRow("GeoLite2 City", city_row)
         rf.addRow("GeoLite2 ASN", asn_row)
         for cb in (
@@ -299,7 +306,7 @@ class SettingsDialog(QDialog):
         intro.setWordWrap(True)
         kf.addRow(intro)
         self.key_fields: dict[str, QLineEdit] = {}
-        for pid, label in self.PROVIDERS:
+        for pid, label, url in self.PROVIDERS:
             edit = QLineEdit()
             edit.setEchoMode(QLineEdit.EchoMode.Password)
             edit.setPlaceholderText("stored" if get_api_key(pid) else "not set")
@@ -308,6 +315,7 @@ class SettingsDialog(QDialog):
             row = QHBoxLayout()
             row.addWidget(edit, 1)
             row.addWidget(clear)
+            row.addWidget(self._link("Get key", url))
             kf.addRow(label, row)
             self.key_fields[pid] = edit
         tabs.addTab(keys, "API keys")
@@ -318,6 +326,14 @@ class SettingsDialog(QDialog):
         buttons.accepted.connect(self._save)
         buttons.rejected.connect(self.reject)
         lay.addWidget(buttons)
+
+    @staticmethod
+    def _link(text: str, url: str) -> QLabel:
+        lbl = QLabel(f"<a href='{url}'>{text} ↗</a>")
+        lbl.setOpenExternalLinks(True)
+        lbl.setToolTip(url)
+        lbl.setStyleSheet("background: transparent;")
+        return lbl
 
     @staticmethod
     def _h(text: str) -> QLabel:
@@ -408,11 +424,12 @@ class AboutDialog(QDialog):
             "<p>Findings are analytical aids. Every conclusion carries a confidence label and must be "
             "verified by the investigator before it is relied upon in a charging decision "
             "or court filing.</p>"
-            f"<p>Releases and source: <code>{RELEASES_PAGE}</code></p>"
+            f"<p>Releases and source: <a href='{RELEASES_PAGE}'>{RELEASES_PAGE}</a></p>"
         )
         text.setTextFormat(Qt.TextFormat.RichText)
         text.setWordWrap(True)
-        text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        text.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        text.setOpenExternalLinks(True)
         lay.addWidget(text)
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         buttons.rejected.connect(self.reject)

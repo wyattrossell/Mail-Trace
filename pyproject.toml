@@ -57,7 +57,7 @@ ignore = ["ANN401"]
 "tests/*" = ["ANN", "E501"]
 "sample_emails/*" = ["E501"]
 "src/mailtrace_core/reporting/*" = ["E501"]
-"src/mailtrace_gui/views/report_tab.py" = ["E501"]
+"src/mailtrace_gui/views/*.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.12"

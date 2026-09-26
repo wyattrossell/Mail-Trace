@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
+from PySide6.QtCore import Qt, QUrl
+from PySide6.QtGui import QColor, QDesktopServices
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QHeaderView,
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QSplitter,
     QTableWidget,
+    QTableWidgetItem,
     QTextBrowser,
     QVBoxLayout,
     QWidget,
@@ -95,6 +96,8 @@ class EnrichmentTab(QWidget):
         h3 = QLabel("URL and attachment reputation (hash lookups only; nothing uploaded)")
         h3.setObjectName("h2")
         self.reputation = _table(["Provider", "Type", "Verdict", "Summary", "Target", "Detail"])
+        self.reputation.itemDoubleClicked.connect(self._open_report_link)
+        self.reputation.setToolTip("Double-click a row to open the provider report page for that indicator")
         rl.addWidget(h3)
         rl.addWidget(self.reputation)
 
@@ -186,6 +189,7 @@ class EnrichmentTab(QWidget):
             target = defang_url(v.target) if v.target_type == "url" else v.target
             for c, val in enumerate([v.provider, v.target_type, v.verdict, v.summary, target, v.detail]):
                 it = _item(val, mono=c == 4, tip=v.link or None)
+                it.setData(Qt.ItemDataRole.UserRole, v.link)
                 if c == 2:
                     it.setForeground(QColor(getattr(p, _VERDICT_COLOUR.get(v.verdict, "info"))))
                 t.setItem(r, c, it)
@@ -197,6 +201,12 @@ class EnrichmentTab(QWidget):
             if rep.skipped
             else "All configured providers answered."
         )
+
+    @staticmethod
+    def _open_report_link(item: QTableWidgetItem) -> None:
+        link = item.data(Qt.ItemDataRole.UserRole)
+        if link:
+            QDesktopServices.openUrl(QUrl(str(link)))
 
     def _ip_row(self, t: QTableWidget, ip: IpEnrichment) -> None:
         p = self.p
@@ -247,8 +257,7 @@ class LegalTab(QWidget):
         )
         self.table.itemSelectionChanged.connect(self._select)
         self.detail = QTextBrowser()
-        self.detail.setOpenExternalLinks(False)
-        self.detail.setOpenLinks(False)
+        self.detail.setOpenExternalLinks(True)
         split.addWidget(self.table)
         split.addWidget(self.detail)
         split.setSizes([300, 300])
@@ -319,10 +328,14 @@ class LegalTab(QWidget):
         self.detail.setHtml(
             f"<h3 style='margin:0'>{tg.provider_name}</h3>"
             f"<p><b>{tg.role}</b> &middot; matched on <code>{tg.matched_on}</code></p>"
-            + (f"<p>Portal: <code>{tg.portal}</code></p>" if tg.portal else "")
-            + (f"<p>Email: <code>{tg.email}</code></p>" if tg.email else "")
+            + (f"<p>Portal: <a href='{tg.portal}'>{tg.portal}</a></p>" if tg.portal else "")
+            + (f"<p>Email: <a href='mailto:{tg.email}'>{tg.email}</a></p>" if tg.email else "")
             + (f"<p>Phone: <code>{tg.phone}</code></p>" if tg.phone else "")
-            + (f"<p>Guidelines: <code>{tg.guidelines_url}</code></p>" if tg.guidelines_url else "")
+            + (
+                f"<p>Guidelines: <a href='{tg.guidelines_url}'>{tg.guidelines_url}</a></p>"
+                if tg.guidelines_url
+                else ""
+            )
             + (f"<p>Jurisdiction: {tg.jurisdiction}</p>" if tg.jurisdiction else "")
             + (f"<p><b>Records typically available</b></p><ul>{recs}</ul>" if recs else "")
             + (f"<p>{tg.notes}</p>" if tg.notes else "")

@@ -55,6 +55,8 @@ def test_window_ingests_and_reports(app, samples_dir: Path, tmp_path: Path, monk
     assert w.tab_findings.tree.topLevelItemCount() >= 3
     assert w._last_result.enrichment is not None and w.tab_enrichment.ips.rowCount() >= 1
     assert w.evidence_list.count() == 1
+    narrative = w.tab_summary.narrative_body.text()
+    assert "Assessment:" in narrative and "What to do next" in narrative
     rt = w.tab_report
     assert rt.report is not None and [d.kind for d in rt._drafts][:3] == ["ic3", "ftc", "apwg"]
     rt.generate("json", ask=False)
