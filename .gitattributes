@@ -1,0 +1,12 @@
+# Source is stored and checked out with LF so Windows, Linux and CI see identical bytes.
+* text=auto eol=lf
+
+# Evidence fixtures must never be touched: DKIM signatures and hashes depend on exact bytes.
+sample_emails/** -text
+*.eml -text
+*.msg binary
+*.pem -text
+*.b64 -text
+*.png binary
+*.ico binary
+*.mmdb binary
